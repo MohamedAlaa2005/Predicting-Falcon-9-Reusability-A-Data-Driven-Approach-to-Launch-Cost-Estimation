@@ -30,7 +30,7 @@ app.layout = html.Div(children=[
     html.Div(dcc.RangeSlider(
         id='payload-slider',
         min=0, max=10000, step=1000,
-        marks={0: '0', 100: '100'},
+        marks={f"{k}":f"{k}" for k in range(0,10001,1000)},
         value=[0, 10000]
     )),
     html.Div(dcc.Graph(id='success-payload-scatter-chart'))
@@ -62,9 +62,9 @@ def update_charts(selected_site, payload_range):
         pie_data = filtered_df.value_counts('class').reset_index()
         pie_chart = px.pie(pie_data, names='class', values=0,title=f"{selected_site} Site")
 
-        scatter_data = filtered_df[
-            (filtered_df['Payload Mass (kg)'] >= payload_range[0]) &
-            (filtered_df['Payload Mass (kg)'] <= payload_range[1])
+        scatter_data = df[
+            (df['Payload Mass (kg)'] >= payload_range[0]) &
+            (df['Payload Mass (kg)'] <= payload_range[1])
             ]
         scatter_chart = px.scatter(scatter_data, x='Payload Mass (kg)', y='class', color="Booster Version Category")
 
@@ -73,4 +73,5 @@ def update_charts(selected_site, payload_range):
 
 if __name__ == '__main__':
     app.run_server()
+
 
